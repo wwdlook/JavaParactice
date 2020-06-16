@@ -2,25 +2,30 @@ package com.demo.practice.pojo;
 
 import lombok.Data;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 @Data
+@XmlRootElement
 public  class City  {
-    public Long ID;
+    private Long ID;
 
-    public String Name;
+    private String Name;
 
-    public String CountryCode;
+    private String CountryCode;
 
-    public String District;
+    private String District;
 
-    public Integer Population;
+    private Integer Population;
 
     public City(){}
 
-    public City(Long ID, String name, String countryCode, String district, Integer population) {
-        this.ID = ID;
+    public City(String name, String countryCode, String district, Integer population) {
+//        this.ID = ID;
         Name = name;
         CountryCode = countryCode;
         District = district;
         Population = population;
     }
+
+
 }

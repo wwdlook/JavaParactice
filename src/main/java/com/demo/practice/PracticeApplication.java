@@ -2,10 +2,12 @@ package com.demo.practice;
 
 import com.demo.practice.pojo.City;
 import com.demo.practice.utils.DButil;
+import com.demo.practice.utils.xmlParser;
 import lombok.Data;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import javax.xml.bind.JAXBContext;
 import java.sql.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,8 +38,17 @@ public class PracticeApplication {
 //        System.out.println(Integer.toBinaryString(i<<=1));
 //        System.out.println(Integer.toBinaryString((ii)<<=1));
 //        System.out.println(Integer.toBinaryString((ii)>>=2));
-        MySQLDemo.main();
+        List<City> cities = MySQLDemo.getData();
+        try{
+            City ele = cities.get(0);
+//            JAXBContext context = JAXBContext.newInstance(ele.getClass());
+//            int i=1;
+            System.out.println(xmlParser.convertToXml(ele));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
+
 }
 
 class MySQLDemo {
@@ -55,6 +66,41 @@ class MySQLDemo {
     static final String USER = "root";
     static final String PASS = "wwdwwd";
 
+    public static List<City> getData(){
+        Connection conn = null;
+        Statement stmt = null;
+        List<City> cities = new ArrayList<>();
+        try {
+            // 注册 JDBC 驱动
+            Class.forName(JDBC_DRIVER);
+
+            // 打开链接
+            System.out.println("连接数据库...");
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            City c = null;
+
+
+            // 执行查询
+            System.out.println(" 实例化Statement对象...");
+            stmt = conn.createStatement();
+            String sql;
+            sql = "SELECT * FROM world.city limit 10";
+            ResultSet rs = stmt.executeQuery(sql);
+
+
+            cities = DButil.putResult(rs, City.class);
+            // 展开结果集数据库
+            for (City ele : cities
+            ) {
+                System.out.println(ele.toString());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return cities;
+    }
     public static void main() {
         Connection conn = null;
         Statement stmt = null;
@@ -78,6 +124,8 @@ class MySQLDemo {
 
             List<City> cities = new ArrayList<>();
             cities = DButil.putResult(rs, City.class);
+            stmt.close();
+            conn.close();
             // 展开结果集数据库
             for (City ele: cities
                  ) {
@@ -86,7 +134,7 @@ class MySQLDemo {
             while(rs.next()){
                 // 通过字段检索
                 c = (City)rs;
-                System.out.print("ID: " + c.getID());
+//                System.out.print("ID: " + c.getID());
                 System.out.print(", city Name: " + c.getName());
                 System.out.print(", city CountryCode: " + c.getCountryCode());
                 System.out.print(", city District: " + c.getDistrict());
