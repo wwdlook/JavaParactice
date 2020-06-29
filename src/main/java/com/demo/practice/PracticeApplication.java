@@ -1,24 +1,55 @@
 package com.demo.practice;
 
+import com.demo.practice.dao.primary.Citya;
+import com.demo.practice.dao.primary.CityaRp;
+
+import com.demo.practice.dao.secondary.Voter;
+import com.demo.practice.dao.secondary.VoterRp;
 import com.demo.practice.pojo.City;
 import com.demo.practice.utils.DButil;
 import com.demo.practice.utils.xmlParser;
-import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.xml.bind.JAXBContext;
 import java.sql.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-//@SpringBootApplication
+
+import javax.xml.bind.Element;
+
+
+@SpringBootApplication
 public class PracticeApplication {
 
     public static void main(String[] args) {
-        //SpringApplication.run(PracticeApplication.class, args);
-        practice();
+        SpringApplication.run(PracticeApplication.class, args);
+//        practice();
+
+    }
+
+    @RestController
+    static class TextController {
+
+        @Autowired
+        CityaRp cityaRp;
+        @Autowired
+        VoterRp voterRp;
+
+        @GetMapping("/hello")
+        public String hello() {
+            Integer id = 1;
+            Citya ca = cityaRp.findByNameLike("Kab");
+            System.out.println(ca);
+            Optional<Voter> va = voterRp.findById((long)id);
+            System.out.println(va);
+            return "hello world";
+        }
+
     }
 
     private static void practice(){
