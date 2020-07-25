@@ -8,6 +8,7 @@ import com.demo.practice.dao.secondary.VoterRp;
 import com.demo.practice.pojo.City;
 import com.demo.practice.utils.DButil;
 import com.demo.practice.utils.xmlParser;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,13 +24,15 @@ import java.util.Optional;
 import javax.xml.bind.Element;
 
 
-@SpringBootApplication
+//@SpringBootApplication
 public class PracticeApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PracticeApplication.class, args);
+//        SpringApplication.run(PracticeApplication.class, args);
 //        practice();
-
+        Gson gson = new Gson();
+        Citya obj2 = gson.fromJson("{\"id\":\"123\"}", Citya.class);
+        System.out.println(obj2);
     }
 
     @RestController
